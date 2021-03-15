@@ -30,7 +30,7 @@ if (process.env.ENV === 'PRODUCTION') {
     port: 5432,
   };
 } else if (process.env.DATABASE_URL) {
-  pgConnectionConfigs = {
+  poolConfigs = {
     connectionString: process.env.DATABASE_URL,
     ssl: {
       rejectUnauthorized: false
@@ -48,8 +48,6 @@ if (process.env.ENV === 'PRODUCTION') {
 
 // Create new Pool with above conditions.
 const pool = new Pool(poolConfigs);
-// Set name of upload directory.
-const multerUpload = multer({ dest: 'uploads/' });
 
 // Init Express.
 const app = express();
@@ -98,7 +96,7 @@ const checkAuth = (req, res, next) => {
   next();
 };
 
-// Configure Multer upload.
+// Set name of multerUpload directory.
 const multerUpload = multer({
   storage: multerS3({
     s3,
